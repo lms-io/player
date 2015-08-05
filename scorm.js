@@ -274,10 +274,6 @@ API_1484_11 = {
   }
 
 };
-
-course = getURLParameter("course");
-registration = getURLParameter("registration");
-
 SCORM2004_objAPI = API_1484_11;
 API_1484_11._preInitialize();
 
