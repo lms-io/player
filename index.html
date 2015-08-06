@@ -20,6 +20,7 @@ function getURLParameter(name) {
 }
 var course = getURLParameter('course');
 var registration = getURLParameter('registration');
+var organization = getURLParameter('organization');
 var url = "/content/" + course + "/" + registration;
 document.getElementById('content').src = url;
 </script>

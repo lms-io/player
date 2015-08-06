@@ -1,12 +1,13 @@
 window.API = (function(){
   var data = {
     "cmi.core.student_id": "000000",
-    "cmi.core.student_name": "Student, Joe",
+    "cmi.core.student_name": "Student,Default",
     "cmi.core.lesson_location": "",
     "cmi.core.lesson_status": "not attempted"
   };
   return {
     LMSInitialize: function() {
+      API.LMSGetValue('cmi.suspend_data');
       return "true";  
     },
     LMSCommit: function() {
@@ -16,11 +17,17 @@ window.API = (function(){
       return "true";  
     },
     LMSGetValue: function(model) {
-      console.log(model);
-      return data[model] || "";
+      ScormFu.get(model, function(v) {
+        console.log("ScormFu is telling me that " + model + " is " + v);
+        data[model] = v; 
+      });
+      if(data[model]) {
+        return data[model];
+      }
+
     },
     LMSSetValue: function(model, value) {
-      console.log(model,value);
+      ScormFu.set(model,value);
       data[model] = value;
       return "true";
     },
@@ -35,7 +42,6 @@ window.API = (function(){
     }
   };
 })();
-
 
 API_1484_11 = {
   version : "1.0", // mandatory version attribute
@@ -131,8 +137,6 @@ API_1484_11 = {
   },
 
   GetValue : function(name) {
-    console.log(name);
-      
   
     if(name == "cmi.suspend_data" && ScormFu.session) {
       return ScormFu.session;
@@ -158,7 +162,6 @@ API_1484_11 = {
   },
 
   SetValue : function(name, value) {
-    console.log(name + " : " + value);
     if(name.indexOf("cmi.interactions.") != -1 && name.indexOf(".id") != -1) {
       ScormFu.last = value;
     }
