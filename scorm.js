@@ -18,7 +18,6 @@ window.API = (function(){
     },
     LMSGetValue: function(model) {
       ScormFu.get(model, function(v) {
-        console.log("ScormFu is telling me that " + model + " is " + v);
         data[model] = v; 
       });
       if(data[model]) {
@@ -96,13 +95,13 @@ API_1484_11 = {
   },
 
   _preInitialize : function() {
-
     this.state = this.STATE.NOT_INITIALIZED;
 
     // set cmi - clone default cmi
     this.cmi = this.cmiDefault;
     
     // custom code
+    this.GetValue('cmi.suspend_data');
   },
 
   // SCO RTE functions
@@ -136,29 +135,13 @@ API_1484_11 = {
     return "true";
   },
 
-  GetValue : function(name) {
-  
-    if(name == "cmi.suspend_data" && ScormFu.session) {
-      return ScormFu.session;
-      
+  GetValue : function(model) {
+    ScormFu.get(model, function(v) {
+      API_1484_11.cmi[model] = v; 
+    });
+    if(this.cmi[model]) {
+      return this.cmi[model];
     }
-    if(this.cmi == null) {
-      this._preInitialize()
-    }
-    
-    if (this.debug) this.debug.log("LMS GetValue", name);
-    if (!this._checkRunning(122, 123)) {
-      return "";
-    }
-    if (!this._valueNameSecurityCheck(name)) return "";
-
-    var retval = this.cmi[name];
-    if (typeof (retval) == "undefined") {
-      retval = "";
-    }
-
-    if (this.debug) this.debug.log("LMS GetValue return: ", retval);
-    return retval;
   },
 
   SetValue : function(name, value) {
@@ -277,6 +260,7 @@ API_1484_11 = {
   }
 
 };
+
 SCORM2004_objAPI = API_1484_11;
 API_1484_11._preInitialize();
 

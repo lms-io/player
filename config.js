@@ -1,1 +1,1 @@
-var configuration = {'scormfu':'http://localhost:8008'}
+var configuration = {'scormfu':'http://api.lms.io:8888'}
